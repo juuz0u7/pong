@@ -7,7 +7,7 @@ SCREEN_WIDTH = 900
 SCREEN_HEIGHT = 500
 print("hello")
 print("hello")
-print('Hello')
+print('Helslo')
 def move_player():
     player.y += player_speed
     if player.top <= 0:
