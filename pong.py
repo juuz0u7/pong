@@ -8,6 +8,7 @@ SCREEN_HEIGHT = 500
 print("hello")
 print("hello")
 print('Helslo')
+START_game = 0
 def move_player():
     player.y += player_speed
     if player.top <= 0:
@@ -42,7 +43,7 @@ def move_ball(dx, dy):
             dy = -dy
 
     now = pygame.time.get_ticks()
-    if now - score_time > pause_len and not is_over:
+    if now - score_time > pause_len and not is_over and now - START_game > pause_len:
         ball.x += dx
         ball.y += dy
 
@@ -101,7 +102,7 @@ class Button():
         objects.append(self)
 
     def process(self):
-
+        global START_game
         mousePos = pygame.mouse.get_pos()  # (x, y)
 
         self.buttonSurface.fill(self.fillColors['normal'])
@@ -110,10 +111,12 @@ class Button():
 
             if pygame.mouse.get_pressed(num_buttons=3)[0]:
                 self.buttonSurface.fill(self.fillColors['pressed'])
+                START_game = pygame.time.get_ticks()
 
                 if not self.alreadyPressed:
                     self.onclickFunction()
                     self.alreadyPressed = True
+
 
             else:
                 self.alreadyPressed = False
