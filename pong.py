@@ -6,6 +6,7 @@ import time
 SCREEN_WIDTH = 900
 SCREEN_HEIGHT = 500
 print("hello")
+print("hello")
 
 def move_player():
     player.y += player_speed
