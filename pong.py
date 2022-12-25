@@ -5,9 +5,6 @@ import time
 
 SCREEN_WIDTH = 900
 SCREEN_HEIGHT = 500
-print("hello")
-print("hello")
-print('Helslo')
 START_game = 0
 def move_player():
     player.y += player_speed
