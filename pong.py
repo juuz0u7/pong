@@ -101,7 +101,6 @@ class Button():
 
         self.buttonSurface = pygame.Surface((self.width, self.height))
         self.buttonRect = pygame.Rect(self.x, self.y, self.width, self.height)
-
         self.buttonSurf = font.render(buttonText, True, (20, 20, 20))
 
         self.alreadyPressed = False
@@ -187,6 +186,12 @@ lose = pygame.mixer.Sound("lose.wav")
 customButton1 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 5, 400, 100, 'Игра против компьютера', myFunction)
 customButton2 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 2, 400, 100, 'Игра против друга', myFunction)
 
+PP_surf = pygame.image.load("image/PB.jpg")
+PP_surf = pygame.transform.scale(PP_surf, (PP_surf.get_width() // 15, PP_surf.get_height() // 15))
+
+PP_rect = PP_surf.get_rect()
+PP_rect.center = (SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2)
+
 running = True
 while running:
     for event in pygame.event.get():
@@ -254,6 +259,7 @@ while running:
         pygame.draw.rect(screen, PADDLE_COLOR, bot)
         pygame.draw.ellipse(screen, PADDLE_COLOR, ball)
         pygame.draw.line(screen, PADDLE_COLOR, (SCREEN_WIDTH // 2, 0), (SCREEN_WIDTH // 2, SCREEN_HEIGHT), width=3)
+        screen.blit(PP_surf, PP_rect)
     elif start_game:
         start_game = False
 
