@@ -6,6 +6,8 @@ import time
 SCREEN_WIDTH = 900
 SCREEN_HEIGHT = 500
 START_game = 0
+
+
 def move_player():
     player.y += player_speed
     if player.top <= 0:
@@ -64,6 +66,14 @@ def move_bot():
             bot.y += bot_speed
         if ball.bottom <= bot.top:
             bot.y -= bot_speed
+
+
+def move_bot2():
+    if ball.centerx < SCREEN_WIDTH // 2 and ball_dx < 0:
+        if ball.top >= player.bottom:
+            player.y += bot_speed
+        if ball.bottom <= player.top:
+            player.y -= bot_speed
 
 
 def win_or_lose():
@@ -202,6 +212,10 @@ while running:
         move_player()
         move_bot()
         ball_dx, ball_dy = move_ball(ball_dx, ball_dy)
+    elif state_menu:
+        move_bot2()
+        move_bot()
+        ball_dx, ball_dy = move_ball(ball_dx, ball_dy)
 
     if ball.right <= 0:
         bot_score += 1
@@ -236,6 +250,10 @@ while running:
     if state_menu:
         for object in objects:
             object.process()
+        pygame.draw.rect(screen, PADDLE_COLOR, player)
+        pygame.draw.rect(screen, PADDLE_COLOR, bot)
+        pygame.draw.ellipse(screen, PADDLE_COLOR, ball)
+        pygame.draw.line(screen, PADDLE_COLOR, (SCREEN_WIDTH // 2, 0), (SCREEN_WIDTH // 2, SCREEN_HEIGHT), width=3)
     elif start_game:
         start_game = False
 
