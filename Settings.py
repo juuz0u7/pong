@@ -1,4 +1,13 @@
-from pong import *
+import pygame
+import pygame.freetype
+
+pygame.init()
+SCREEN_WIDTH = 900
+SCREEN_HEIGHT = 500
+main_font = pygame.freetype.Font(None, 42)
+font = pygame.font.SysFont('Arial', 40)
+objects = []
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
 class Button:

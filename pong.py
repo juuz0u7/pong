@@ -1,7 +1,5 @@
-import Settings
-import pygame
 import random
-import pygame.freetype
+from Settings import *
 
 SCREEN_WIDTH = 900
 SCREEN_HEIGHT = 500
@@ -96,17 +94,10 @@ state_1 = False
 
 start_game = True
 
-pygame.init()
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 icon = pygame.image.load("ping_pong.ico")
 pygame.display.set_caption("Pong")
 pygame.display.set_icon(icon)
-
-main_font = pygame.freetype.Font(None, 42)
-font = pygame.font.SysFont('Arial', 40)
-
-objects = []
 
 player = pygame.Rect(10, SCREEN_HEIGHT // 2, 10, 100)
 bot = pygame.Rect(SCREEN_WIDTH - 20, SCREEN_HEIGHT // 2, 10, 100)
@@ -134,9 +125,9 @@ score = pygame.mixer.Sound("score.wav")
 win = pygame.mixer.Sound("win.wav")
 lose = pygame.mixer.Sound("lose.wav")
 
-customButton1 = Settings.Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 5, 400, 100, 'Игра против компьютера',
-                                myFunction)
-customButton2 = Settings.Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 2, 400, 100, 'Игра против друга', myFunction)
+customButton1 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 5, 400, 100, 'Игра против компьютера',
+                       myFunction)
+customButton2 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 2, 400, 100, 'Игра против друга', myFunction)
 
 PP_surf = pygame.image.load("image/PB.jpg")
 PP_surf = pygame.transform.scale(PP_surf, (PP_surf.get_width() // 15, PP_surf.get_height() // 15))
@@ -212,8 +203,8 @@ while running:
         pygame.draw.ellipse(screen, PADDLE_COLOR, ball)
         pygame.draw.line(screen, PADDLE_COLOR, (SCREEN_WIDTH // 2, 0), (SCREEN_WIDTH // 2, SCREEN_HEIGHT), width=3)
         screen.blit(PP_surf, PP_rect)
-    elif start_game:
-        start_game = False
+    elif state_1:
+        state_1 = False
 
     clock.tick(FPS)
     pygame.display.update()
