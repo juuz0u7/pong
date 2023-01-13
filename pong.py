@@ -1,10 +1,8 @@
 import random
 from Settings import *
-
-SCREEN_WIDTH = 900
-SCREEN_HEIGHT = 500
-START_game = 0
-
+from other_update import *
+from other_variables import *
+from other_states import *
 
 def move_player():
     player.y += player_speed
@@ -89,41 +87,10 @@ def myFunction():
     state_1 = True
 
 
-state_menu = True
-state_1 = False
-
-start_game = True
-
-clock = pygame.time.Clock()
-icon = pygame.image.load("ping_pong.ico")
-pygame.display.set_caption("Pong")
-pygame.display.set_icon(icon)
-
 player = pygame.Rect(10, SCREEN_HEIGHT // 2, 10, 100)
 bot = pygame.Rect(SCREEN_WIDTH - 20, SCREEN_HEIGHT // 2, 10, 100)
 ball = pygame.Rect(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, 20, 20)
 
-player_speed = 0
-bot_speed = 9
-ball_max_speed = 9
-ball_dx, ball_dy = -9, 9
-
-score_time = 0
-pause_len = 1000
-
-BG_COLOR = (255, 255, 255)
-PADDLE_COLOR = (0, 0, 0)
-FPS = 60
-
-player_score = 0
-bot_score = 0
-win_score = 1
-is_over = False
-
-pong = pygame.mixer.Sound("pong.wav")
-score = pygame.mixer.Sound("score.wav")
-win = pygame.mixer.Sound("win.wav")
-lose = pygame.mixer.Sound("lose.wav")
 
 customButton1 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 5, 400, 100, 'Игра против компьютера',
                        myFunction)
