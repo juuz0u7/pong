@@ -1,7 +1,7 @@
+import Settings
 import pygame
 import random
 import pygame.freetype
-import time
 
 SCREEN_WIDTH = 900
 SCREEN_HEIGHT = 500
@@ -49,7 +49,7 @@ def move_ball(dx, dy):
     return dx, dy
 
 
-def restart_ball(dx, dy):
+def restart_ball():
     ball.center = SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2
 
     dx = random.choice((random.randint(-ball_max_speed, -3),
@@ -83,55 +83,6 @@ def win_or_lose():
         lose.play()
     else:
         score.play()
-
-
-class Button():
-    def __init__(self, x, y, width, height, buttonText='Button', onclickFunction=None, onePress=False):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.onclickFunction = onclickFunction
-
-        self.fillColors = {
-            'normal': '#ffffff',
-            'hover': '#666666',
-            'pressed': '#333333',
-        }
-
-        self.buttonSurface = pygame.Surface((self.width, self.height))
-        self.buttonRect = pygame.Rect(self.x, self.y, self.width, self.height)
-        self.buttonSurf = font.render(buttonText, True, (20, 20, 20))
-
-        self.alreadyPressed = False
-
-        objects.append(self)
-
-    def process(self):
-        global START_game
-        mousePos = pygame.mouse.get_pos()  # (x, y)
-
-        self.buttonSurface.fill(self.fillColors['normal'])
-        if self.buttonRect.collidepoint(mousePos):
-            self.buttonSurface.fill(self.fillColors['hover'])
-
-            if pygame.mouse.get_pressed(num_buttons=3)[0]:
-                self.buttonSurface.fill(self.fillColors['pressed'])
-                START_game = pygame.time.get_ticks()
-
-                if not self.alreadyPressed:
-                    self.onclickFunction()
-                    self.alreadyPressed = True
-
-
-            else:
-                self.alreadyPressed = False
-
-        self.buttonSurface.blit(self.buttonSurf, [
-            self.buttonRect.width / 2 - self.buttonSurf.get_rect().width / 2,
-            self.buttonRect.height / 2 - self.buttonSurf.get_rect().height / 2
-        ])
-        screen.blit(self.buttonSurface, self.buttonRect)
 
 
 def myFunction():
@@ -183,8 +134,9 @@ score = pygame.mixer.Sound("score.wav")
 win = pygame.mixer.Sound("win.wav")
 lose = pygame.mixer.Sound("lose.wav")
 
-customButton1 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 5, 400, 100, 'Игра против компьютера', myFunction)
-customButton2 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 2, 400, 100, 'Игра против друга', myFunction)
+customButton1 = Settings.Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 5, 400, 100, 'Игра против компьютера',
+                                myFunction)
+customButton2 = Settings.Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 2, 400, 100, 'Игра против друга', myFunction)
 
 PP_surf = pygame.image.load("image/PB.jpg")
 PP_surf = pygame.transform.scale(PP_surf, (PP_surf.get_width() // 15, PP_surf.get_height() // 15))
@@ -236,7 +188,7 @@ while running:
             is_over = True
 
     if ball.right <= 0 or ball.left >= SCREEN_WIDTH:
-        ball_dx, ball_dy = restart_ball(ball_dx, ball_dy)
+        ball_dx, ball_dy = restart_ball()
 
     screen.fill(BG_COLOR)
 
