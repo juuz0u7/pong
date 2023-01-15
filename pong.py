@@ -2,7 +2,13 @@ import random
 from Settings import *
 from other_update import *
 from other_variables import *
-from other_states import *
+
+ball_dx, ball_dy = -9, 9
+state_menu = True
+state_1 = False
+FPS = 60
+is_over = False
+
 
 def move_player():
     player.y += player_speed
@@ -91,7 +97,6 @@ player = pygame.Rect(10, SCREEN_HEIGHT // 2, 10, 100)
 bot = pygame.Rect(SCREEN_WIDTH - 20, SCREEN_HEIGHT // 2, 10, 100)
 ball = pygame.Rect(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, 20, 20)
 
-
 customButton1 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 5, 400, 100, 'Игра против компьютера',
                        myFunction)
 customButton2 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 2, 400, 100, 'Игра против друга', myFunction)
@@ -150,7 +155,7 @@ while running:
 
     screen.fill(BG_COLOR)
 
-    if state_1:
+    if not state_1:
         main_font.render_to(screen, (330, 25), str(player_score))
         main_font.render_to(screen, (550, 25), str(bot_score))
         pygame.draw.rect(screen, PADDLE_COLOR, player)

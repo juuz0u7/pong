@@ -1,7 +1,7 @@
 player_speed = 0
 bot_speed = 9
 ball_max_speed = 9
-ball_dx, ball_dy = -9, 9
+
 
 score_time = 0
 pause_len = 1000
