@@ -6,6 +6,7 @@ from other_variables import *
 ball_dx, ball_dy = -9, 9
 state_menu = True
 state_1 = False
+state_2 = False
 FPS = 60
 is_over = False
 
@@ -128,15 +129,16 @@ while running:
             if event.key == pygame.K_s:
                 player_speed -= 7
 
-    if state_1:
-        move_player()
-        move_bot()
-        ball_dx, ball_dy = move_ball(ball_dx, ball_dy)
-    elif state_menu:
+    if state_menu:  # Динамика меню
         move_bot2()
         move_bot()
         ball_dx, ball_dy = move_ball(ball_dx, ball_dy)
+    elif state_1:
+        move_player()
+        move_bot()
+        ball_dx, ball_dy = move_ball(ball_dx, ball_dy)
 
+    # Изменение счёта
     if ball.right <= 0:
         bot_score += 1
         win_or_lose()
@@ -150,12 +152,30 @@ while running:
         if player_score == win_score:
             is_over = True
 
+    # Рестарт мяча после гола
     if ball.right <= 0 or ball.left >= SCREEN_WIDTH:
         ball_dx, ball_dy = restart_ball()
 
     screen.fill(BG_COLOR)
-
-    if not state_1:
+    # Отрисовки
+    if state_menu:  # Рисуем меню
+        for object in objects:
+            object.process()
+            if state_1:
+                score_time = pygame.time.get_ticks()
+                restart_ball()
+        pygame.draw.rect(screen, PADDLE_COLOR, player)
+        pygame.draw.rect(screen, PADDLE_COLOR, bot)
+        pygame.draw.ellipse(screen, PADDLE_COLOR, ball)
+        pygame.draw.line(screen, PADDLE_COLOR, (SCREEN_WIDTH // 2, 0), (SCREEN_WIDTH // 2, SCREEN_HEIGHT), width=3)
+        # screen.blit(PP_surf, PP_rect)
+    elif state_1:
+        pygame.draw.rect(screen, PADDLE_COLOR, player)
+        pygame.draw.rect(screen, PADDLE_COLOR, bot)
+        pygame.draw.ellipse(screen, PADDLE_COLOR, ball)
+        pygame.draw.line(screen, PADDLE_COLOR, (SCREEN_WIDTH // 2, 0), (SCREEN_WIDTH // 2, SCREEN_HEIGHT), width=3)
+        # screen.blit(PP_surf, PP_rect)
+    elif state_2:
         main_font.render_to(screen, (330, 25), str(player_score))
         main_font.render_to(screen, (550, 25), str(bot_score))
         pygame.draw.rect(screen, PADDLE_COLOR, player)
@@ -163,20 +183,10 @@ while running:
         pygame.draw.ellipse(screen, PADDLE_COLOR, ball)
         pygame.draw.line(screen, PADDLE_COLOR, (SCREEN_WIDTH // 2, 0), (SCREEN_WIDTH // 2, SCREEN_HEIGHT), width=3)
 
+    # Отрисовка конечного экрана
     if is_over:
         screen.fill(BG_COLOR)
         main_font.render_to(screen, (260, 200), "Game over, Press F")
-
-    if state_menu:
-        for object in objects:
-            object.process()
-        pygame.draw.rect(screen, PADDLE_COLOR, player)
-        pygame.draw.rect(screen, PADDLE_COLOR, bot)
-        pygame.draw.ellipse(screen, PADDLE_COLOR, ball)
-        pygame.draw.line(screen, PADDLE_COLOR, (SCREEN_WIDTH // 2, 0), (SCREEN_WIDTH // 2, SCREEN_HEIGHT), width=3)
-        screen.blit(PP_surf, PP_rect)
-    elif state_1:
-        state_1 = False
 
     clock.tick(FPS)
     pygame.display.update()
