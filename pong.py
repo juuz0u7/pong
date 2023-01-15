@@ -1,4 +1,7 @@
 import random
+
+import pygame
+
 from Settings import *
 from other_update import *
 from other_variables import *
@@ -17,6 +20,14 @@ def move_player():
         player.top = 0
     if player.bottom >= SCREEN_HEIGHT:
         player.bottom = SCREEN_HEIGHT
+
+
+def move_player2():
+    bot.y += player2_speed
+    if bot.top <= 0:
+        bot.top = 0
+    if bot.bottom >= SCREEN_HEIGHT:
+        bot.bottom = SCREEN_HEIGHT
 
 
 def move_ball(dx, dy):
@@ -80,7 +91,9 @@ def move_bot2():
 
 
 def win_or_lose():
-    if player_score == win_score:
+    if state_2:
+        win.play()
+    elif player_score == win_score:
         win.play()
     elif bot_score == win_score:
         lose.play()
@@ -88,10 +101,18 @@ def win_or_lose():
         score.play()
 
 
-def myFunction():
-    global state_menu, state_1
+def on_state_1():
+    global state_menu, state_1, state_2
     state_menu = False
     state_1 = True
+    state_2 = False
+
+
+def on_state_2():
+    global state_menu, state_1, state_2
+    state_menu = False
+    state_1 = False
+    state_2 = True
 
 
 player = pygame.Rect(10, SCREEN_HEIGHT // 2, 10, 100)
@@ -99,8 +120,8 @@ bot = pygame.Rect(SCREEN_WIDTH - 20, SCREEN_HEIGHT // 2, 10, 100)
 ball = pygame.Rect(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, 20, 20)
 
 customButton1 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 5, 400, 100, 'Игра против компьютера',
-                       myFunction)
-customButton2 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 2, 400, 100, 'Игра против друга', myFunction)
+                       on_state_1)
+customButton2 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 2, 400, 100, 'Игра против друга', on_state_2)
 
 PP_surf = pygame.image.load("image/PB.jpg")
 PP_surf = pygame.transform.scale(PP_surf, (PP_surf.get_width() // 15, PP_surf.get_height() // 15))
@@ -123,12 +144,21 @@ while running:
                 player_speed -= 7
             if event.key == pygame.K_s:
                 player_speed += 7
+            if event.key == pygame.K_UP:
+                player2_speed -= 7
+            if event.key == pygame.K_DOWN:
+                player2_speed += 7
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_w:
                 player_speed += 7
             if event.key == pygame.K_s:
                 player_speed -= 7
+            if event.key == pygame.K_UP:
+                player2_speed += 7
+            if event.key == pygame.K_DOWN:
+                player2_speed -= 7
 
+    # Физика игры
     if state_menu:  # Динамика меню
         move_bot2()
         move_bot()
@@ -136,6 +166,10 @@ while running:
     elif state_1:
         move_player()
         move_bot()
+        ball_dx, ball_dy = move_ball(ball_dx, ball_dy)
+    elif state_2:
+        move_player()
+        move_player2()
         ball_dx, ball_dy = move_ball(ball_dx, ball_dy)
 
     # Изменение счёта
