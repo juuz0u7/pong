@@ -1,4 +1,5 @@
 player_speed = 0
+player2_speed = 0
 bot_speed = 9
 ball_max_speed = 9
 

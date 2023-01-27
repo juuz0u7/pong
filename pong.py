@@ -1,8 +1,16 @@
 import random
+
 from Settings import *
 from other_update import *
 from other_variables import *
 
+ball_dx, ball_dy = -9, 9
+state_menu = True
+state_menu2 = False
+state_1 = False
+state_2 = False
+
+is_over = False
 
 
 def move_player():
@@ -13,8 +21,16 @@ def move_player():
         player.bottom = SCREEN_HEIGHT
 
 
+def move_player2():
+    bot.y += player2_speed
+    if bot.top <= 0:
+        bot.top = 0
+    if bot.bottom >= SCREEN_HEIGHT:
+        bot.bottom = SCREEN_HEIGHT
+
+
 def move_ball(dx, dy):
-    global FPS, pause_len
+    global pause_len
     if ball.top <= 0 or ball.bottom >= SCREEN_HEIGHT:
         dy = -dy
 
@@ -22,7 +38,6 @@ def move_ball(dx, dy):
         pong.play()
         if abs(ball.left - player.right) < 10:
             dx = -dx
-            FPS += 10
         elif abs(ball.top - player.bottom) < 10 and dy < 0:
             dy = -dy
         elif abs(player.top - ball.bottom) < 10 and dy > 0:
@@ -32,7 +47,6 @@ def move_ball(dx, dy):
         pong.play()
         if abs(ball.right - bot.left) < 10:
             dx = -dx
-            FPS += 10
         elif abs(ball.top - bot.bottom) < 10 and dy < 0:
             dy = -dy
         elif abs(bot.top - ball.bottom) < 10 and dy > 0:
@@ -74,7 +88,9 @@ def move_bot2():
 
 
 def win_or_lose():
-    if player_score == win_score:
+    if state_2:
+        win.play()
+    elif player_score == win_score:
         win.play()
     elif bot_score == win_score:
         lose.play()
@@ -82,10 +98,27 @@ def win_or_lose():
         score.play()
 
 
-def myFunction():
-    global state_menu, state_1
+def on_state_menu_2():
+    global state_menu, state_menu2, state_1, state_2
     state_menu = False
+    state_menu2 = True
+    state_1 = False
+    state_2 = False
+
+
+def on_state_1():
+    global state_menu, state_menu2, state_1, state_2
+    state_menu = False
+    state_menu2 = False
     state_1 = True
+    state_2 = False
+
+
+def on_state_2():
+    global state_menu, state_1, state_2
+    state_menu = False
+    state_1 = False
+    state_2 = True
 
 
 player = pygame.Rect(10, SCREEN_HEIGHT // 2, 10, 100)
@@ -93,8 +126,11 @@ bot = pygame.Rect(SCREEN_WIDTH - 20, SCREEN_HEIGHT // 2, 10, 100)
 ball = pygame.Rect(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, 20, 20)
 
 customButton1 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 5, 400, 100, 'Игра против компьютера',
-                       myFunction)
-customButton2 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 2, 400, 100, 'Игра против друга', myFunction)
+                       on_state_menu_2)
+customButton2 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 2, 400, 100, 'Игра против друга', on_state_2)
+customButtonlvl1 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 5, 400, 100, 'Легко',
+                          on_state_menu_2, True)
+customButtonlvl2 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 2, 400, 100, 'Нормально', on_state_menu_2, True)
 
 PP_surf = pygame.image.load("image/PB.jpg")
 PP_surf = pygame.transform.scale(PP_surf, (PP_surf.get_width() // 15, PP_surf.get_height() // 15))
@@ -117,19 +153,32 @@ while running:
                 player_speed -= 7
             if event.key == pygame.K_s:
                 player_speed += 7
+            if event.key == pygame.K_UP:
+                player2_speed -= 7
+            if event.key == pygame.K_DOWN:
+                player2_speed += 7
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_w:
                 player_speed += 7
             if event.key == pygame.K_s:
                 player_speed -= 7
+            if event.key == pygame.K_UP:
+                player2_speed += 7
+            if event.key == pygame.K_DOWN:
+                player2_speed -= 7
 
-    if state_menu:  # Динамика меню
+    # Физика игры
+    if state_menu or state_menu2:  # Динамика меню
         move_bot2()
         move_bot()
         ball_dx, ball_dy = move_ball(ball_dx, ball_dy)
     elif state_1:
         move_player()
         move_bot()
+        ball_dx, ball_dy = move_ball(ball_dx, ball_dy)
+    elif state_2:
+        move_player()
+        move_player2()
         ball_dx, ball_dy = move_ball(ball_dx, ball_dy)
 
     # Изменение счёта
@@ -154,6 +203,17 @@ while running:
     # Отрисовки
     if state_menu:  # Рисуем меню
         for object in objects:
+            object.process()
+            if state_1:
+                score_time = pygame.time.get_ticks()
+                restart_ball()
+        pygame.draw.rect(screen, PADDLE_COLOR, player)
+        pygame.draw.rect(screen, PADDLE_COLOR, bot)
+        pygame.draw.ellipse(screen, PADDLE_COLOR, ball)
+        pygame.draw.line(screen, PADDLE_COLOR, (SCREEN_WIDTH // 2, 0), (SCREEN_WIDTH // 2, SCREEN_HEIGHT), width=3)
+        # screen.blit(PP_surf, PP_rect)
+    elif state_menu2:
+        for object in objects_lvl:
             object.process()
             if state_1:
                 score_time = pygame.time.get_ticks()
