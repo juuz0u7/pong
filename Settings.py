@@ -16,6 +16,7 @@ START_game = 0
 main_font = pygame.freetype.Font(None, 42)
 font = pygame.font.SysFont('Arial', 40)
 objects = []
+objects_lvl = []
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 clock = pygame.time.Clock()
@@ -24,12 +25,13 @@ pygame.display.set_icon(icon)
 
 
 class Button:
-    def __init__(self, x, y, width, height, buttonText='Button', onclickFunction=None):
+    def __init__(self, x, y, width, height, buttonText='Button', onclickFunction=None, is_lvl=False):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
         self.onclickFunction = onclickFunction
+
 
         self.fillColors = {
             'normal': '#ffffff',
@@ -42,8 +44,10 @@ class Button:
         self.buttonSurf = font.render(buttonText, True, (20, 20, 20))
 
         self.alreadyPressed = False
-
-        objects.append(self)
+        if is_lvl:
+            objects_lvl.append(self)
+        else:
+            objects.append(self)
 
     def process(self):
         global START_game
