@@ -3,12 +3,6 @@ from Settings import *
 from other_update import *
 from other_variables import *
 
-ball_dx, ball_dy = -9, 9
-state_menu = True
-state_1 = False
-state_2 = False
-FPS = 60
-is_over = False
 
 
 def move_player():
