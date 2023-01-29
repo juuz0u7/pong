@@ -22,6 +22,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 pygame.display.set_caption("Pong")
 pygame.display.set_icon(icon)
+button_time = 0
 
 
 class Button:
@@ -31,7 +32,6 @@ class Button:
         self.width = width
         self.height = height
         self.onclickFunction = onclickFunction
-
 
         self.fillColors = {
             'normal': '#ffffff',
@@ -50,7 +50,7 @@ class Button:
             objects.append(self)
 
     def process(self):
-        global START_game
+        global START_game, button_time
         mousePos = pygame.mouse.get_pos()  # (x, y)
 
         self.buttonSurface.fill(self.fillColors['normal'])
@@ -61,8 +61,9 @@ class Button:
                 self.buttonSurface.fill(self.fillColors['pressed'])
                 START_game = pygame.time.get_ticks()
 
-                if not self.alreadyPressed:
+                if not self.alreadyPressed and START_game - button_time > 650:
                     self.onclickFunction()
+                    button_time = pygame.time.get_ticks()
                     self.alreadyPressed = True
 
             else:

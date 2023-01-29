@@ -13,5 +13,5 @@ FPS = 60
 
 player_score = 0
 bot_score = 0
-win_score = 1
+win_score = 2
 is_over = False

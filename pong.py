@@ -63,10 +63,10 @@ def move_ball(dx, dy):
 def restart_ball():
     ball.center = SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2
 
-    dx = random.choice((random.randint(-ball_max_speed, -3),
-                        random.randint(3, ball_max_speed)))
-    dy = random.choice((random.randint(-ball_max_speed, -3),
-                        random.randint(3, ball_max_speed)))
+    dx = random.choice((random.randint(-ball_max_speed, -4),
+                        random.randint(4, ball_max_speed)))
+    dy = random.choice((random.randint(-ball_max_speed, -4),
+                        random.randint(4, ball_max_speed)))
 
     return dx, dy
 
@@ -106,8 +106,27 @@ def on_state_menu_2():
     state_2 = False
 
 
-def on_state_1():
+def on_state_lvl1():
     global state_menu, state_menu2, state_1, state_2
+    state_menu = False
+    state_menu2 = False
+    state_1 = True
+    state_2 = False
+
+
+def on_state_lvl2():
+    global state_menu, state_menu2, state_1, state_2, bot_speed
+    bot_speed = 11
+    state_menu = False
+    state_menu2 = False
+    state_1 = True
+    state_2 = False
+
+
+def on_state_lvl3():
+    global state_menu, state_menu2, state_1, state_2, bot_speed, ball_max_speed
+    bot_speed = 15
+    ball_max_speed = 20
     state_menu = False
     state_menu2 = False
     state_1 = True
@@ -125,12 +144,11 @@ player = pygame.Rect(10, SCREEN_HEIGHT // 2, 10, 100)
 bot = pygame.Rect(SCREEN_WIDTH - 20, SCREEN_HEIGHT // 2, 10, 100)
 ball = pygame.Rect(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, 20, 20)
 
-customButton1 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 5, 400, 100, 'Игра против компьютера',
-                       on_state_menu_2)
+customButton1 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 5, 400, 100, 'Игра против компьютера', on_state_menu_2)
 customButton2 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 2, 400, 100, 'Игра против друга', on_state_2)
-customButtonlvl1 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 5, 400, 100, 'Легко',
-                          on_state_menu_2, True)
-customButtonlvl2 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 2, 400, 100, 'Нормально', on_state_menu_2, True)
+customButtonlvl1 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT - 400, 400, 100, 'Легко', on_state_lvl1, True)
+customButtonlvl2 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT - 300, 400, 100, 'Нормально', on_state_lvl2, True)
+customButtonlvl3 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT - 200, 400, 100, 'HARDCORE', on_state_lvl3, True)
 
 PP_surf = pygame.image.load("image/PB.jpg")
 PP_surf = pygame.transform.scale(PP_surf, (PP_surf.get_width() // 15, PP_surf.get_height() // 15))
@@ -183,12 +201,14 @@ while running:
 
     # Изменение счёта
     if ball.right <= 0:
+        score_time = pygame.time.get_ticks()
         bot_score += 1
         win_or_lose()
         ball_dy *= -1
         if bot_score == win_score:
             is_over = True
     if ball.left >= SCREEN_WIDTH:
+        score_time = pygame.time.get_ticks()
         player_score += 1
         win_or_lose()
         ball_dy *= 1
@@ -224,6 +244,8 @@ while running:
         pygame.draw.line(screen, PADDLE_COLOR, (SCREEN_WIDTH // 2, 0), (SCREEN_WIDTH // 2, SCREEN_HEIGHT), width=3)
         # screen.blit(PP_surf, PP_rect)
     elif state_1:
+        main_font.render_to(screen, (330, 25), str(player_score))
+        main_font.render_to(screen, (550, 25), str(bot_score))
         pygame.draw.rect(screen, PADDLE_COLOR, player)
         pygame.draw.rect(screen, PADDLE_COLOR, bot)
         pygame.draw.ellipse(screen, PADDLE_COLOR, ball)
