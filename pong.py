@@ -63,10 +63,10 @@ def move_ball(dx, dy):
 def restart_ball():
     ball.center = SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2
 
-    dx = random.choice((random.randint(-ball_max_speed, -4),
-                        random.randint(4, ball_max_speed)))
-    dy = random.choice((random.randint(-ball_max_speed, -4),
-                        random.randint(4, ball_max_speed)))
+    dx = random.choice((random.randint(-ball_max_speed, -9),
+                        random.randint(9, ball_max_speed)))
+    dy = random.choice((random.randint(-ball_max_speed, -9),
+                        random.randint(9, ball_max_speed)))
 
     return dx, dy
 
@@ -144,10 +144,10 @@ player = pygame.Rect(10, SCREEN_HEIGHT // 2, 10, 100)
 bot = pygame.Rect(SCREEN_WIDTH - 20, SCREEN_HEIGHT // 2, 10, 100)
 ball = pygame.Rect(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, 20, 20)
 
-customButton1 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 5, 400, 100, 'Игра против компьютера', on_state_menu_2)
-customButton2 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 2, 400, 100, 'Игра против друга', on_state_2)
-customButtonlvl1 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT - 400, 400, 100, 'Легко', on_state_lvl1, True)
-customButtonlvl2 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT - 300, 400, 100, 'Нормально', on_state_lvl2, True)
+customButton1 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 5, 400, 100, 'Player VS PC', on_state_menu_2)
+customButton2 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT // 2, 400, 100, 'Player VS Player', on_state_2)
+customButtonlvl1 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT - 400, 400, 100, 'Easy', on_state_lvl1, True)
+customButtonlvl2 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT - 300, 400, 100, 'Normal', on_state_lvl2, True)
 customButtonlvl3 = Button(SCREEN_WIDTH // 3.75, SCREEN_HEIGHT - 200, 400, 100, 'HARDCORE', on_state_lvl3, True)
 
 PP_surf = pygame.image.load("image/PB.jpg")
@@ -230,8 +230,6 @@ while running:
         pygame.draw.rect(screen, PADDLE_COLOR, player)
         pygame.draw.rect(screen, PADDLE_COLOR, bot)
         pygame.draw.ellipse(screen, PADDLE_COLOR, ball)
-        pygame.draw.line(screen, PADDLE_COLOR, (SCREEN_WIDTH // 2, 0), (SCREEN_WIDTH // 2, SCREEN_HEIGHT), width=3)
-        # screen.blit(PP_surf, PP_rect)
     elif state_menu2:
         for object in objects_lvl:
             object.process()
@@ -241,8 +239,6 @@ while running:
         pygame.draw.rect(screen, PADDLE_COLOR, player)
         pygame.draw.rect(screen, PADDLE_COLOR, bot)
         pygame.draw.ellipse(screen, PADDLE_COLOR, ball)
-        pygame.draw.line(screen, PADDLE_COLOR, (SCREEN_WIDTH // 2, 0), (SCREEN_WIDTH // 2, SCREEN_HEIGHT), width=3)
-        # screen.blit(PP_surf, PP_rect)
     elif state_1:
         main_font.render_to(screen, (330, 25), str(player_score))
         main_font.render_to(screen, (550, 25), str(bot_score))
