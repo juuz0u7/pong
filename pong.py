@@ -4,7 +4,7 @@ from Settings import *
 from other_update import *
 from other_variables import *
 
-ball_dx, ball_dy = -9, 9
+ball_dx, ball_dy = -5, 5
 state_menu = True
 state_menu2 = False
 state_1 = False
@@ -34,7 +34,7 @@ def move_ball(dx, dy):
     if ball.top <= 0 or ball.bottom >= SCREEN_HEIGHT:
         dy = -dy
 
-    if ball.colliderect(player) and dx < 0:
+    if ball.colliderect(player) and dx < 0 and on_state_lvl1:
         pong.play()
         if abs(ball.left - player.right) < 10:
             dx = -dx
@@ -63,10 +63,10 @@ def move_ball(dx, dy):
 def restart_ball():
     ball.center = SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2
 
-    dx = random.choice((random.randint(-ball_max_speed, -9),
-                        random.randint(9, ball_max_speed)))
-    dy = random.choice((random.randint(-ball_max_speed, -9),
-                        random.randint(9, ball_max_speed)))
+    dx = random.choice((random.randint(-ball_max_speed, -ball_min_speed),
+                        random.randint(ball_min_speed, ball_max_speed)))
+    dy = random.choice((random.randint(-ball_max_speed, -ball_min_speed),
+                        random.randint(ball_min_speed, ball_max_speed)))
 
     return dx, dy
 
@@ -107,7 +107,11 @@ def on_state_menu_2():
 
 
 def on_state_lvl1():
-    global state_menu, state_menu2, state_1, state_2
+    global state_menu, state_menu2, state_1, state_2, ball_max_speed, ball_min_speed, bot_speed, ball_dx, ball_dy
+    ball_max_speed = 5
+    ball_min_speed = 3
+    bot_speed = 4
+    ball_dx, ball_dy = restart_ball()
     state_menu = False
     state_menu2 = False
     state_1 = True
@@ -115,8 +119,11 @@ def on_state_lvl1():
 
 
 def on_state_lvl2():
-    global state_menu, state_menu2, state_1, state_2, bot_speed
-    bot_speed = 11
+    global state_menu, state_menu2, state_1, state_2, ball_max_speed, ball_min_speed, bot_speed, ball_dx, ball_dy
+    ball_max_speed = 7
+    ball_min_speed = 5
+    bot_speed = 6
+    ball_dx, ball_dy = restart_ball()
     state_menu = False
     state_menu2 = False
     state_1 = True
@@ -124,9 +131,10 @@ def on_state_lvl2():
 
 
 def on_state_lvl3():
-    global state_menu, state_menu2, state_1, state_2, bot_speed, ball_max_speed
-    bot_speed = 15
-    ball_max_speed = 20
+    global state_menu, state_menu2, state_1, state_2, ball_max_speed, ball_min_speed, bot_speed
+    ball_max_speed = 9
+    ball_min_speed = 7
+    bot_speed = 8
     state_menu = False
     state_menu2 = False
     state_1 = True
