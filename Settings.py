@@ -24,53 +24,14 @@ pygame.display.set_caption("Pong")
 pygame.display.set_icon(icon)
 button_time = 0
 
+player = pygame.Rect(10, SCREEN_HEIGHT // 2, 10, 100)
+bot = pygame.Rect(SCREEN_WIDTH - 20, SCREEN_HEIGHT // 2, 10, 100)
+ball = pygame.Rect(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, 20, 20)
 
-class Button:
-    def __init__(self, x, y, width, height, buttonText='Button', onclickFunction=None, is_lvl=False):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.onclickFunction = onclickFunction
 
-        self.fillColors = {
-            'normal': '#ffffff',
-            'hover': '#666666',
-            'pressed': '#333333',
-        }
 
-        self.buttonSurface = pygame.Surface((self.width, self.height))
-        self.buttonRect = pygame.Rect(self.x, self.y, self.width, self.height)
-        self.buttonSurf = font.render(buttonText, True, (20, 20, 20))
+PP_surf = pygame.image.load("image/PB.jpg")
+PP_surf = pygame.transform.scale(PP_surf, (PP_surf.get_width() // 15, PP_surf.get_height() // 15))
 
-        self.alreadyPressed = False
-        if is_lvl:
-            objects_lvl.append(self)
-        else:
-            objects.append(self)
-
-    def process(self):
-        global START_game, button_time
-        mousePos = pygame.mouse.get_pos()  # (x, y)
-
-        self.buttonSurface.fill(self.fillColors['normal'])
-        if self.buttonRect.collidepoint(mousePos):
-            self.buttonSurface.fill(self.fillColors['hover'])
-
-            if pygame.mouse.get_pressed(num_buttons=3)[0]:
-                self.buttonSurface.fill(self.fillColors['pressed'])
-                START_game = pygame.time.get_ticks()
-
-                if not self.alreadyPressed and START_game - button_time > 650:
-                    self.onclickFunction()
-                    button_time = pygame.time.get_ticks()
-                    self.alreadyPressed = True
-
-            else:
-                self.alreadyPressed = False
-
-        self.buttonSurface.blit(self.buttonSurf, [
-            self.buttonRect.width / 2 - self.buttonSurf.get_rect().width / 2,
-            self.buttonRect.height / 2 - self.buttonSurf.get_rect().height / 2
-        ])
-        screen.blit(self.buttonSurface, self.buttonRect)
+PP_rect = PP_surf.get_rect()
+PP_rect.center = (SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2)

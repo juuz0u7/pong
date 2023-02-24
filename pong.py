@@ -1,7 +1,6 @@
 import random
 
-from Settings import *
-from other_update import *
+from button import *
 from other_variables import *
 
 ball_dx, ball_dy = -5, 5
